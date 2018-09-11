@@ -26,6 +26,8 @@ module OmniAuth
 
       info do
         hash = {
+          installing_user: auth['installer_user']['user_id'],
+          app_user: auth['app_user_id'],
           name: user_identity['name'],
           email: user_identity['email'],    # Requires the identity.email scope
           image: user_identity['image_48'], # Requires the identity.avatar scope
@@ -96,6 +98,10 @@ module OmniAuth
       def bot_info
         return {} unless access_token.params.key? 'bot'
         access_token.params['bot']
+      end
+
+      def auth
+        @auth ||= access_token.params.to_h
       end
     end
   end
