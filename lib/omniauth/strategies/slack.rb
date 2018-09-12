@@ -22,16 +22,18 @@ module OmniAuth
       # User ID is not guaranteed to be globally unique across all Slack users.
       # The combination of user ID and team ID, on the other hand, is guaranteed
       # to be globally unique.
-      uid { "#{user_identity['id']}-#{team_identity['id']}" }
+      uid { "#{auth['installer_user']['user_id']}-#{auth['team_id']}" }
 
       info do
+        # {"ok"=>true, "token_type"=>"app", "app_id"=>"ACQC5BN6M", "app_user_id"=>"UCQC86XJ5", "team_name"=>"zaprri", "team_id"=>"T3B3T2E82", "authorizing_user"=>{"user_id"=>"U3BQ0E0UX", "app_home"=>"DCS157FU7"}, "installer_user"=>{"user_id"=>"U3BQ0E0UX", "app_home"=>"DCS157FU7"}, "scopes"=>{"app_home"=>["im:history", "conversations:read", "chat:write", "commands", "im:read"], "team"=>["users.profile:read"], "channel"=>["channels:history", "conversations:read", "chat:write", "commands"], "group"=>["groups:history", "conversations:read", "chat:write", "commands"], "mpim"=>["conversations:read", "chat:write", "commands"], "im"=>["im:history", "conversations:read", "chat:write", "commands"]}}
         hash = {
-          installing_user: auth['installer_user']['user_id'],
-          app_user: auth['app_user_id'],
           name: user_identity['name'],
           email: user_identity['email'],    # Requires the identity.email scope
           image: user_identity['image_48'], # Requires the identity.avatar scope
-          team_name: team_identity['name']  # Requires the identity.team scope
+          team_id: auth['team_id'],
+          team: auth['team_name'],
+          installing_user: auth['installer_user']['user_id'],
+          app_user_id: auth['app_user_id'],
         }
 
         unless skip_info?
